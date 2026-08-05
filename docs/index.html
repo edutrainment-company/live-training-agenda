@@ -1229,6 +1229,16 @@
         font-size: 16px;
         outline-color: var(--orange);
       }
+      .category-hint {
+        display: block;
+        margin-top: 5px;
+        color: #bdbdbd;
+        font-size: 11px;
+        line-height: 1.35;
+        text-transform: none;
+        letter-spacing: 0;
+        font-weight: 400;
+      }
       .add-item-modal em {
         text-transform: none;
         letter-spacing: 0;
@@ -16203,7 +16213,7 @@ Minimum version required to store current data is: ` +
           [et, J] = Lt.useState(null),
           [k, P] = Lt.useState("./agenda-background.mp4"),
           [ut, jt] = Lt.useState(!1),
-          [_, x] = Lt.useState({ title: "", start: "", end: "", speaker: "" });
+          [_, x] = Lt.useState({ title: "", type: "Input", start: "", end: "", speaker: "" });
         Lt.useEffect(() => {
           const N = window.setInterval(() => d(new Date()), 1e3);
           return () => window.clearInterval(N);
@@ -16367,11 +16377,11 @@ Minimum version required to store current data is: ` +
               done: !1,
               manualStart: N,
               speaker: _.speaker.trim(),
-              de: { title: Nt, detail: "", type: "Input" },
-              en: { title: Nt, detail: "", type: "Input" },
+              de: { title: Nt, detail: "", type: _.type.trim() || "Input" },
+              en: { title: Nt, detail: "", type: _.type.trim() || "Input" },
             },
           ]),
-            x({ title: "", start: "", end: "", speaker: "" }),
+            x({ title: "", type: "Input", start: "", end: "", speaker: "" }),
             jt(!1);
         }
         function Xn(N) {
@@ -16919,6 +16929,22 @@ Minimum version required to store current data is: ` +
                             }),
                             z.jsxs("label", {
                               children: [
+                                "Kategorie / Methode",
+                                z.jsx("input", {
+                                  value: j[o].type,
+                                  list: "agenda-category-options",
+                                  onChange: (N) =>
+                                    Pe(j.id, "type", N.target.value),
+                                }),
+                                z.jsx("small", {
+                                  className: "category-hint",
+                                  children:
+                                    "z. B. Input, Ankommen, Interaktion, Praxis, Transfer oder Pause",
+                                }),
+                              ],
+                            }),
+                            z.jsxs("label", {
+                              children: [
                                 "Beschreibung",
                                 z.jsx("textarea", {
                                   value: j[o].detail,
@@ -16987,6 +17013,23 @@ Minimum version required to store current data is: ` +
                             }),
                           ],
                         }),
+                        z.jsxs("label", {
+                          children: [
+                            "Kategorie / Methode",
+                            z.jsx("input", {
+                              value: _.type,
+                              list: "agenda-category-options",
+                              onChange: (N) =>
+                                x((G) => ({ ...G, type: N.target.value })),
+                              placeholder: "z. B. Interaktion",
+                            }),
+                            z.jsx("small", {
+                              className: "category-hint",
+                              children:
+                                "Vorschlag wählen oder eine eigene Kategorie eingeben.",
+                            }),
+                          ],
+                        }),
                         z.jsxs("div", {
                           className: "time-fields",
                           children: [
@@ -17045,6 +17088,12 @@ Minimum version required to store current data is: ` +
                           : "Changes are stored in this browser.",
                     }),
                   ],
+                }),
+                z.jsx("datalist", {
+                  id: "agenda-category-options",
+                  children: ["Ankommen", "Input", "Interaktion", "Praxis", "Transfer", "Pause"].map(
+                    (N) => z.jsx("option", { value: N }, N),
+                  ),
                 }),
               ],
             }),
